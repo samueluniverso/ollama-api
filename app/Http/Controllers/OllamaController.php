@@ -9,9 +9,8 @@ class OllamaController extends Controller
 {
     public function ask(Request $request)
     {
-        ini_set('max_execution_time', 300);
-
-        $response = Ollama::prompt($request->prompt)
+        $response = Ollama::agent("Você é um ser humano.")
+            ->prompt($request->prompt)
             ->model('openchat')
             ->options([
                 'temperature' => 0.8
