@@ -5,13 +5,22 @@ namespace App\Http\Controllers;
 use Cloudstudio\Ollama\Facades\Ollama;
 use Illuminate\Http\Request;
 
+set_time_limit(300);
+
 class OllamaController extends Controller
 {
     public function ask(Request $request)
     {
-        $response = Ollama::agent("Você é um ser humano.")
-            ->prompt($request->prompt)
-            ->model('openchat')
+        $context = file_get_contents(base_path().'/data/univates.csv');
+
+        $response = Ollama::agent("Você é um professor.")
+            ->model('mistral')
+            ->prompt("
+                [INST]
+                    $context
+                [/INST]
+                $request->prompt
+            ")
             ->options([
                 'temperature' => 0.8
             ])
